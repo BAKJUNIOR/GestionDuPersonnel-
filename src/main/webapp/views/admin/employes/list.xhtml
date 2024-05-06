@@ -11,36 +11,23 @@
     </ui:define>
     <ui:define name="main">
 
+
         <p:outputPanel id="container" styleClass="container">
 
-            <div class="card crud-demo">
-                <h:form id="form">
-                    <p:growl id="messages" showDetail="true" />
+            <h:form>
+                <div class="card">
+                    <p:dataTable var="employe" value="#{employeController.employes}" lazy="true">
+                        <p:column headerText="Code">
+                            <h:outputText value="#{employe.idEmploye}" />
+                        </p:column>
+                        <p:column headerText="Name">
+                            <h:outputText value="#{employe.adresse}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
 
-                    <p:toolbar>
-                        <p:toolbarGroup>
-                            <p:commandButton value="New" icon="pi pi-plus"
-                                             oncomplete="PF('manageProductDialog').show()"
-                                             styleClass="ui-button-success" style="margin-right: .5rem">
-                                <p:resetInput target=":dialogs:manage-product-content" />
-                            </p:commandButton>
-                            <p:commandButton id="delete-products-button"
-                                             icon="pi pi-trash"
-                                             styleClass="ui-button-danger"  update="@this">
-                                <p:confirm header="Confirmation" message="Delete the selected products?"
-                                           icon="pi pi-exclamation-triangle" />
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                        <p:toolbarGroup align="right">
-                            <p:fileUpload mode="simple" skinSimple="true" label="Import" chooseIcon="pi pi-download" />
-                            <p:commandButton value="Export" icon="pi pi-upload" styleClass="ui-button-help" ajax="false">
-                                <p:dataExporter type="pdf" target="dt-products" fileName="products" />
-                            </p:commandButton>
-                        </p:toolbarGroup>
-                    </p:toolbar>
 
-                </h:form>
-            </div >
 
         </p:outputPanel>
     </ui:define>

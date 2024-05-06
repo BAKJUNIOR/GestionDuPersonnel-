@@ -41,6 +41,15 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.0.2.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.6.5.Final</version> <!-- Remplacez {version} par la version souhaitée -->
+        </dependency>
+
+
+
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>

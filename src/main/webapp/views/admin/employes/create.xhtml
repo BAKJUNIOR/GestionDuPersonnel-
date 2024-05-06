@@ -15,57 +15,31 @@
                 <div class="title">
                     Artikel Baru
                 </div>
+                <div class="card">
+                    <h:form>
+                        <p:messages id="msgs"/>
 
-                <div class="content">
-                    <div class="content-body p-shadow-1">
-                        <h:panelGrid columns="2"
-                                     styleClass="ui-fluid"
-                                     style="width: 100%;">
+                        <h:panelGrid columns="3" cellpadding="7" styleClass="mb-3">
+                            <p:outputLabel for="firstname" value="Firstname:"/>
+                            <p:inputText id="firstname" value="#{loginBean.login}" required="true" label="Firstname">
+                                <f:validateLength minimum="2"/>
+                            </p:inputText>
+                            <p:message for="firstname" display="icon"/>
 
-                            <p:outputLabel for="judul" value="Judul"/>
-                            <p:inputText id="judul" placeholder="Ketik judul artikel"
-                                         value="#{artikelCreate.artikel.judul}"/>
-
-                            <p:outputLabel for="kategori" value="Kategori"/>
-                            <p:selectOneMenu id="kategori" 
-                                             value="#{artikelCreate.artikel.kategori}"
-                                             converter="entityConverter">
-                                <f:selectItems value="#{artikelCreate.kategoris}"
-                                               var="kat"
-                                               itemValue="#{kat}"
-                                               itemLabel="#{kat.nama}"/>
-                            </p:selectOneMenu>
-                            
-                            <p:outputLabel for="cover" value="Cover Gambar"/>
-                            <p:fileUpload id="cover" 
-                                          value="#{artikelCreate.uploadedFile}"
-                                          listener="#{artikelCreate.handleUpload}"
-                                          skinSimple="true"
-                                          mode="simple"
-                                          auto="true"
-                                          update=":mainForm:imagePanel"/>
-                            
-                            <h:outputText/>
-                            <p:outputPanel id="imagePanel">
-                                <p:graphicImage value="#{imageStreamer.file}"
-                                                styleClass="gambar-cover"
-                                                rendered="#{artikelCreate.artikel.gambar != null}">
-                                    <f:param name="filename" value="#{artikelCreate.artikel.gambar}"/>
-                                </p:graphicImage>
-                            </p:outputPanel>
-
-                            <p:outputLabel for="isi" value="Isi"/>
-                            <p:textEditor id="isi"
-                                          value="#{artikelCreate.artikel.isi}"
-                                          height="600"/>
-
-                            <h:outputText/>
-                            <p:commandButton value="Simpan"
-                                             action="#{artikelCreate.save()}"/>
+                            <p:outputLabel for="lastname" value="Lastname:"/>
+                            <p:inputText id="lastname" value="#{loginBean.login}" label="Lastname" required="true">
+                                <f:validateLength minimum="2"/>
+                                <p:ajax update="msgLastname" event="keyup"/>
+                            </p:inputText>
+                            <p:message for="lastname" id="msgLastname" display="icon"/>
 
                         </h:panelGrid>
-                    </div>
+
+                        <p:commandButton value="Save" update="@form" action="#{loginBean.}" icon="pi pi-check" />
+                    </h:form>
                 </div>
+
+
             </p:outputPanel>
         </ui:define>
     </ui:composition>
