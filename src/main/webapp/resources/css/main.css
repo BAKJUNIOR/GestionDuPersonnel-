@@ -52,6 +52,11 @@ body {
 }
 
 .container {
+    margin-left: 250px;
+    padding-top: 200px;
+}
+
+.containerDashboard {
     margin-left: 320px;
     padding-top: 70px;
 }

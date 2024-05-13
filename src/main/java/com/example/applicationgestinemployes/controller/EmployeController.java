@@ -1,55 +1,71 @@
 package com.example.applicationgestinemployes.controller;
 
+
 import com.example.applicationgestinemployes.model.Employe;
-import com.example.applicationgestinemployes.servive.EmployeService;
+import com.example.applicationgestinemployes.service.EmployeService;
 import jakarta.annotation.PostConstruct;
-
-
-import jakarta.faces.bean.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import jakarta.faces.view.ViewScoped;
 
-
+import java.io.Serializable;
 import java.util.List;
 
 @Named
-@RequestScoped
-public class EmployeController {
+@ViewScoped
+public class EmployeController implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Inject
     private EmployeService employeService;
 
-    private List<Employe> employes;
-    private Employe newEmploye;
+    private transient List<Employe> employes;
+    private Employe selectedEmploye = new Employe();
 
     @PostConstruct
     public void init() {
         employes = employeService.getAllEmployes();
-        newEmploye = new Employe();
     }
 
-    public void saveEmploye() {
-        employeService.saveEmploye(newEmploye);
-        employes = employeService.getAllEmployes(); // Rafraîchir la liste des employés
-        newEmploye = new Employe(); // Réinitialiser le nouvel employé
+    public void addEmploye() {
+        employeService.addEmploye(selectedEmploye);
+        selectedEmploye = new Employe(); // Reset
+        init(); // Recharger la liste des employés
     }
 
-    public void deleteEmploye(Employe employe) {
-        employeService.deleteEmploye(employe);
-        employes.remove(employe); // Supprimer l'employé de la liste affichée
+    public void updateEmploye() {
+        employeService.updateEmploye(selectedEmploye);
+        selectedEmploye = new Employe(); // Reset
     }
 
-    // Getters and setters
-
+    public void deleteEmploye() {
+        boolean deleted = employeService.deleteEmploye(selectedEmploye.getIdEmploye());
+        if (deleted) {
+            employes.remove(selectedEmploye);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Employé supprimé avec succès"));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur", "L'employé n'existe pas ou ne peut être supprimé"));
+        }
+        selectedEmploye = new Employe(); // Reset
+        init(); // Recharger la liste des employés
+    }
+    // Getters and Setters
     public List<Employe> getEmployes() {
         return employes;
     }
 
-    public Employe getNewEmploye() {
-        return newEmploye;
+    public void setEmployes(List<Employe> employes) {
+        this.employes = employes;
     }
 
-    public void setNewEmploye(Employe newEmploye) {
-        this.newEmploye = newEmploye;
+    public Employe getSelectedEmploye() {
+        return selectedEmploye;
+    }
+
+    public void setSelectedEmploye(Employe selectedEmploye) {
+        this.selectedEmploye = selectedEmploye;
     }
 }
