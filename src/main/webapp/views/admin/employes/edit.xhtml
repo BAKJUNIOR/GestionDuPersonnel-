@@ -7,66 +7,46 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     <ui:composition template="/resources/tpl/admin.xhtml">
         <ui:define name="title">
-            <title>Edit Artikel #{artikelEdit.artikel.judul}</title>
+            <title>Modifier employé </title>
         </ui:define>
         <ui:define name="main">
 
             <p:outputPanel id="container" styleClass="container">
                 <div class="title">
-                    Edit #{artikelEdit.artikel.judul}
+                    Edit
                 </div>
 
-                <div class="content">
-                    <div class="content-body p-shadow-1">
-                        <h:panelGrid columns="2"
-                                     styleClass="ui-fluid"
-                                     style="width: 100%;">
+                <h:form id="updateForm">
+                    <p:panel header="Modifier Employé">
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                        <p:panelGrid columns="2">
+                            <h:outputLabel value="Nom:" />
+                            <p:inputText value="#{employeController.selectedEmploye.nom}" />
 
-                            <p:outputLabel for="judul" value="Judul"/>
-                            <p:inputText id="judul" placeholder="Ketik judul artikel"
-                                         value="#{artikelEdit.artikel.judul}"/>
+                            <h:outputLabel value="Adresse:" />
+                            <p:inputText value="#{employeController.selectedEmploye.adresse}" />
 
-                            <p:outputLabel for="kategori" value="Kategori"/>
-                            <p:selectOneMenu id="kategori" 
-                                             value="#{artikelEdit.artikel.kategori}"
-                                             converter="entityConverter">
-                                <f:selectItems value="#{artikelEdit.kategoris}"
-                                               var="kat"
-                                               itemValue="#{kat}"
-                                               itemLabel="#{kat.nama}"/>
-                            </p:selectOneMenu>
 
-                            <p:outputLabel for="cover" value="Cover Gambar"/>
-                            <p:fileUpload id="cover" 
-                                          value="#{artikelEdit.uploadedFile}"
-                                          listener="#{artikelEdit.handleUpload}"
-                                          skinSimple="true"
-                                          mode="simple"
-                                          auto="true"
-                                          update=":mainForm:imagePanel"/>
+                            <h:outputLabel value="Poste:" />
+                            <p:inputText value="#{employeController.selectedEmploye.poste}" />
 
-                            <h:outputText/>
-                            <p:outputPanel id="imagePanel">
-                                <p:graphicImage value="#{imageStreamer.file}"
-                                                styleClass="gambar-cover"
-                                                rendered="#{artikelEdit.artikel.gambar != null}">
-                                    <f:param name="filename" value="#{artikelEdit.artikel.gambar}"/>
-                                </p:graphicImage>
-                            </p:outputPanel>
 
-                            <p:outputLabel for="isi" value="Isi"/>
-                            <p:textEditor id="isi"
-                                          value="#{artikelEdit.artikel.isi}"
-                                          height="600"/>
+                            <h:outputLabel value="N° Télépphone:" />
+                            <p:inputText value="#{employeController.selectedEmploye.numeroTelephone}" />
 
-                            <h:outputText/>
-                            <p:commandButton value="Simpan"
-                                             action="#{artikelEdit.save()}"/>
+                            <h:outputLabel value="Couriel:" />
+                            <p:inputText value="#{employeController.selectedEmploye.courriel}" />
 
-                        </h:panelGrid>
-                    </div>
+                            <h:outputLabel value="Salaire:" />
+                            <p:inputText value="#{employeController.selectedEmploye.salaire}"/>
 
-                </div>
+                        </p:panelGrid>
+
+                        <p:commandButton value="Modifier" action="#{employeController.updateEmploye}" process="@form" update="messages" ajax="false"/>
+                    </p:panel>
+                </h:form>
+
+
             </p:outputPanel>
         </ui:define>
     </ui:composition>

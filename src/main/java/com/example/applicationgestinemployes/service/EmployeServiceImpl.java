@@ -30,6 +30,7 @@ public class EmployeServiceImpl implements EmployeService {
         em.persist(employe);
     }
 
+    @Transactional
     @Override
     public void updateEmploye(Employe employe) {
         em.merge(employe);

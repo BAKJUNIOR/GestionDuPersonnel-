@@ -48,9 +48,10 @@
 
                         <p:column headerText="Actions">
 
-                            <p:commandButton icon="pi pi-pencil" title="Modifier" action="#{employeController.setSelectedEmploye(employe)}" style="margin-right: 5px">
-                                <f:ajax execute="@this" render="@form" />
-                            </p:commandButton>
+                            <p:button icon="pi pi-pencil" value="Modifier" outcome="edit.xhtml" style="margin-right: 5px">
+                                <f:param name="id" value="#{employe.idEmploye}" />
+                            </p:button>
+
 
 
                             <p:commandButton icon="pi pi-trash" title="Supprimer" action="#{employeController.deleteEmploye}" id="btnForm" process="@this" ajax="false" style="background-color: red ; border: black">

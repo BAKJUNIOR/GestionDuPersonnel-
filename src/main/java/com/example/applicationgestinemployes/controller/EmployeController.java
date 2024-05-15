@@ -8,7 +8,9 @@ import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.faces.view.ViewScoped;
+import jakarta.transaction.Transactional;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class EmployeController implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
 
     @Inject
     private EmployeService employeService;
@@ -27,7 +30,12 @@ public class EmployeController implements Serializable {
     @PostConstruct
     public void init() {
         employes = employeService.getAllEmployes();
+        String employeId = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+        if (employeId != null) {
+            selectedEmploye = employeService.getEmploye(Long.parseLong(employeId));
+        }
     }
+
 
     public void addEmploye() {
         employeService.addEmploye(selectedEmploye);
@@ -35,9 +43,29 @@ public class EmployeController implements Serializable {
         init(); // Recharger la liste des employés
     }
 
-    public void updateEmploye() {
-        employeService.updateEmploye(selectedEmploye);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé mis à jour avec succès."));
+
+
+    @Transactional
+    public void updateEmploye() throws IOException {
+        if (selectedEmploye != null && selectedEmploye.getIdEmploye() != null) {
+            Employe existingEmploye = employeService.getEmploye(selectedEmploye.getIdEmploye());
+            if (existingEmploye != null) {
+                existingEmploye.setNom(selectedEmploye.getNom());
+                existingEmploye.setAdresse(selectedEmploye.getAdresse());
+                existingEmploye.setCourriel(selectedEmploye.getCourriel());
+                existingEmploye.setPoste(selectedEmploye.getPoste());
+                existingEmploye.setNumeroTelephone(selectedEmploye.getNumeroTelephone());
+                existingEmploye.setSalaire(selectedEmploye.getSalaire());
+
+                employeService.updateEmploye(existingEmploye);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé mis à jour avec succès."));
+                FacesContext.getCurrentInstance().getExternalContext().redirect("list.xhtml?id=" + existingEmploye.getIdEmploye());
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "L'employé sélectionné n'existe pas."));
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Aucun employé sélectionné."));
+        }
     }
 
 
