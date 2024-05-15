@@ -1,6 +1,5 @@
 package com.example.applicationgestinemployes.controller;
 
-
 import com.example.applicationgestinemployes.model.Employe;
 import com.example.applicationgestinemployes.service.EmployeService;
 import jakarta.annotation.PostConstruct;
@@ -38,20 +37,23 @@ public class EmployeController implements Serializable {
 
     public void updateEmploye() {
         employeService.updateEmploye(selectedEmploye);
-        selectedEmploye = new Employe(); // Reset
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé mis à jour avec succès."));
     }
 
+
     public void deleteEmploye() {
-        boolean deleted = employeService.deleteEmploye(selectedEmploye.getIdEmploye());
-        if (deleted) {
+        if (selectedEmploye != null && selectedEmploye.getIdEmploye() != null) {
+            employeService.deleteEmploye(selectedEmploye.getIdEmploye());
             employes.remove(selectedEmploye);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Employé supprimé avec succès"));
+            selectedEmploye = new Employe(); // Reset selected employe
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé supprimé avec succès."));
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur", "L'employé n'existe pas ou ne peut être supprimé"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur", "Aucun employé sélectionné."));
         }
-        selectedEmploye = new Employe(); // Reset
-        init(); // Recharger la liste des employés
     }
+
+
+
     // Getters and Setters
     public List<Employe> getEmployes() {
         return employes;

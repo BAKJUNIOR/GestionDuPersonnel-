@@ -4,6 +4,7 @@ import com.example.applicationgestinemployes.model.Employe;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class EmployeServiceImpl implements EmployeService {
         return em.find(Employe.class, id);
     }
 
+    @Transactional
     @Override
     public void addEmploye(Employe employe) {
         em.persist(employe);
@@ -33,6 +35,8 @@ public class EmployeServiceImpl implements EmployeService {
         em.merge(employe);
     }
 
+
+    @Transactional
     @Override
     public boolean deleteEmploye(Long id) {
         Employe employe = em.find(Employe.class, id);

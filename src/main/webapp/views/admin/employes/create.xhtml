@@ -5,39 +5,51 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="/resources/tpl/admin.xhtml">
-        <ui:define name="title">
-            <title>Artikel Baru</title>
-        </ui:define>
-        <ui:define name="main">
+<ui:composition template="/resources/tpl/admin.xhtml">
 
-            <p:outputPanel id="container" styleClass="container">
-                <div class="title">
-                    Artikel Baru
+
+    <ui:define name="title">
+        <title>Enregistrer un employés</title>
+    </ui:define>
+    <ui:define name="main">
+
+
+        <p:outputPanel id="container" styleClass="container">
+
+                <div class="title" >
+                    Ajouter un employé
                 </div>
-                <div class="card">
-                    <h:form>
-                        <p:messages id="msgs"/>
 
-                        <h:panelGrid columns="3" cellpadding="7" styleClass="mb-3">
-                            <p:outputLabel for="firstname" value="Firstname:"/>
-                            <p:inputText id="firstname" value="#{loginBean.login}" required="true" label="Firstname">
-                                <f:validateLength minimum="2"/>
-                            </p:inputText>
-                            <p:message for="firstname" display="icon"/>
+                    <h:form id="createEmployeeForm" >
 
-                            <p:outputLabel for="lastname" value="Lastname:"/>
-                            <p:inputText id="lastname" value="#{loginBean.login}" label="Lastname" required="true">
-                                <f:validateLength minimum="2"/>
-                                <p:ajax update="msgLastname" event="keyup"/>
-                            </p:inputText>
-                            <p:message for="lastname" id="msgLastname" display="icon"/>
+                        <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
+
+
+                            <p:outputLabel for="nom" value="Nom:"/>
+                            <p:inputText id="nom" value="#{employeController.selectedEmploye.nom}" required="true" requiredMessage="Le nom est obligatoire."/>
+
+                            <p:outputLabel for="adresse" value="Adresse:"/>
+                            <p:inputText id="adresse" value="#{employeController.selectedEmploye.adresse}"/>
+
+                            <p:outputLabel for="numeroTelephone" value="N° Téléphone:"/>
+                            <p:inputText id="numeroTelephone" value="#{employeController.selectedEmploye.numeroTelephone}"/>
+
+                            <p:outputLabel for="courriel" value="Courriel:"/>
+                            <p:inputText id="courriel" value="#{employeController.selectedEmploye.courriel}" type="email"  required="true"/>
+
+                            <p:outputLabel for="poste" value="Poste:"/>
+                            <p:inputText id="poste" value="#{employeController.selectedEmploye.poste}"  required="true"/>
+
+                            <p:outputLabel for="salaire" value="Salaire:"/>
+                            <p:inputText id="salaire" value="#{employeController.selectedEmploye.salaire}" type="number"  required="true"/>
 
                         </h:panelGrid>
 
-                        <p:commandButton value="Save" update="@form" action="#{loginBean.}" icon="pi pi-check" />
+                        <p:commandButton value="Submit" action="#{employeController.addEmploye}"
+                                         ajax="false" />
+
+                        <p:messages id="msgs"/>
                     </h:form>
-                </div>
 
 
             </p:outputPanel>

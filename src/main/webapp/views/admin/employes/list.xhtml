@@ -7,16 +7,12 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <ui:composition template="/resources/tpl/admin.xhtml">
 
-
     <ui:define name="title">
         <title>Liste des employés</title>
     </ui:define>
     <ui:define name="main">
 
-
-
         <p:outputPanel id="container" styleClass="container">
-
 
             <h:form id="employesTable">
                 <div class="card">
@@ -24,12 +20,10 @@
                                  rows="8" paginatorPosition="bottom" filterEvent="keyup" filterDelay="200"
                                  lazy="false" currentPageReportTemplate="({currentPage} de {totalPages}, Total de {totalRecords} employés)">
 
-                        <p:column headerText="Code" filterBy="#{employe.idEmploye}" filterMatchMode="contains">
-                            <h:outputText value="#{employe.idEmploye}" />
-                        </p:column>
+
 
                         <p:column headerText="Nom" filterBy="#{employe.nom}" filterMatchMode="contains">
-                            <h:outputText value="#{employe.nom}" />
+                      <strong> <h:outputText value="#{employe.nom}" /> </strong>
                         </p:column>
 
                         <p:column headerText="Adresse" filterBy="#{employe.adresse}" filterMatchMode="contains">
@@ -41,7 +35,7 @@
                         </p:column>
 
                         <p:column headerText="Couriel" filterBy="#{employe.courriel}" filterMatchMode="contains">
-                            <h:outputText value="#{employe.courriel}" />
+                        <strong> <h:outputText value="#{employe.courriel}" /></strong>
                         </p:column>
 
                         <p:column headerText="Poste" filterBy="#{employe.poste}" filterMatchMode="contains">
@@ -49,32 +43,33 @@
                         </p:column>
 
                         <p:column headerText="Salaire" filterBy="#{employe.salaire}" filterMatchMode="contains">
-                            <h:outputText value="#{employe.salaire}" />
+                          <strong> <h:outputText value="#{employe.salaire}" /> </strong>
                         </p:column>
 
                         <p:column headerText="Actions">
-                            <p:commandButton icon="pi pi-pencil" title="Modifier"
-                                             update=":mainForm:employesTable" style="margin-right: 5px"/>
 
-                            <p:commandButton icon="pi pi-trash" title="Supprimer"
-                                             actionListener="#{employeController.deleteEmploye}"
-                                             update=":mainForm:employesTable "
-                                             style="color: red;"
-                                             oncomplete="PF('deleteDialog').hide()">
-                                <f:setPropertyActionListener value="#{employe}" target="#{employeController.selectedEmploye}" />
+                            <p:commandButton icon="pi pi-pencil" title="Modifier" action="#{employeController.setSelectedEmploye(employe)}" style="margin-right: 5px">
+                                <f:ajax execute="@this" render="@form" />
                             </p:commandButton>
 
 
+                            <p:commandButton icon="pi pi-trash" title="Supprimer" action="#{employeController.deleteEmploye}" id="btnForm" process="@this" ajax="false" style="background-color: red ; border: black">
+                                <f:setPropertyActionListener target="#{employeController.selectedEmploye}" value="#{employe}"  />
+                                <f:ajax execute="@this" render="@form"/>
+                            </p:commandButton>
                         </p:column>
 
                     </p:dataTable>
-
                 </div>
-            </h:form>
 
+
+
+
+            </h:form>
 
         </p:outputPanel>
     </ui:define>
 </ui:composition>
 </html>
+
 
