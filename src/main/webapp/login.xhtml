@@ -43,14 +43,14 @@
             </p:messages>
 
             <div style="margin-bottom: 16px;">
-                <p:inputText id="login" placeholder="Username"  value="#{loginBean.login}"    required="true" p:required="true"
+                <p:inputText id="login" placeholder="Username"  value="#{loginContrller.username}"    required="true" p:required="true"
                              requiredMessage="La saisie du Username est obligatoire !"/>
                 <h:message for="login" styleClass="errorBlock" />
             </div>
 
 
             <div style="margin-bottom: 16px; border-color: red">
-                <p:password id="password" placeholder="Password" value="#{loginBean.password}" required="true" p:required="true"
+                <p:password id="password" placeholder="Password" value="#{loginContrller.password}" required="true" p:required="true"
                             requiredMessage="La saisie du mot de passe est obligatoire !"
                             validatorMessage="Votre mot de passe doit contenir entre 3 à 12 caractères" />
                 <h:message for="password" styleClass="errorBlock" />
@@ -59,7 +59,7 @@
             <div >
 
                 <p:commandButton value="Se connecter"
-                                 action="#{loginBean.returnAction()}"/>
+                                 action="#{loginContrller.login()}"/>
             </div>
         </div>
     </h:form>

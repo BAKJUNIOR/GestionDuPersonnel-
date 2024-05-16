@@ -32,20 +32,18 @@
             <h3 style="color: white ; font-size: 20px">Staff_Stream</h3>
             <p:menu styleClass="menu" style="padding-top: 10px">
                 <p:menuitem icon="pi pi-home" value="Tableau de bord"
-                            outcome="/views/admin/index.xhtml" styleClass="menu-item-dashboard"/>
-                <p:menuitem icon="pi pi-users" value="Gestion des employés"
-                            outcome="/views/admin/responsable/listEmploye.xhtml" styleClass="menu-item" />
+                            outcome="/views/admin/indexEmploye.xhtml" styleClass="menu-item-dashboard"/>
+                <p:menuitem icon="pi pi-users" value="Demande Congé"
+                            outcome="/views/admin/employe/DemandeConge.xhtml" styleClass="menu-item" />
                 <p:separator/>
-                <p:menuitem icon="pi pi-calendar" value="Gestion des congés"
-                            outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
+                <p:menuitem icon="pi pi-calendar" value="Historique demande congé"
+                            outcome="/views/admin/employe/historiqueConge.xhtml " styleClass="menu-item"/>
                 <p:separator/>
-                <p:menuitem icon="pi pi-envelope" value="Messagerie interne"
-                            outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
-                <p:separator/>
+
             </p:menu>
 
 
-            <p:menu styleClass="menu" style="margin-top: 100%;">
+            <p:menu styleClass="menu" style="margin-top: 150%;">
                 <p:menuitem icon="pi pi-sign-out" value="Se déconnecter"  action="#{loginContrller.logout}"/>
             </p:menu>
         </div>

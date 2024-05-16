@@ -59,7 +59,7 @@ public class EmployeController implements Serializable {
 
                 employeService.updateEmploye(existingEmploye);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé mis à jour avec succès."));
-                FacesContext.getCurrentInstance().getExternalContext().redirect("list.xhtml?id=" + existingEmploye.getIdEmploye());
+                FacesContext.getCurrentInstance().getExternalContext().redirect("listEmploye.xhtml?id=" + existingEmploye.getIdEmploye());
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "L'employé sélectionné n'existe pas."));
             }

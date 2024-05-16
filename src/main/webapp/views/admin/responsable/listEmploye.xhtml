@@ -12,9 +12,40 @@
     </ui:define>
     <ui:define name="main">
 
+        <style type="">
+            .newEmployé {
+                border: 1px solid #dee2e6;
+                background: #f8f9fa;
+                font-size: 18px;
+                background-color: #379fef;
+                color: #ffffff;
+                padding: 1rem;
+                border-radius: 4px;
+                margin-right: .5rem
+            }
+        </style>
+
         <p:outputPanel id="container" styleClass="container">
 
+
+
             <h:form id="employesTable">
+
+                <p:toolbar>
+                    <p:toolbarGroup>
+                        <h:button value="Ajouter un employé" outcome="createEmploye.xhtml" styleClass="newEmployé"    >
+
+                        </h:button>
+
+                    </p:toolbarGroup>
+                    <p:toolbarGroup align="right">
+                        <p:commandButton value="Export liste des employés" icon="pi pi-upload" styleClass="ui-button-help" ajax="false">
+                            <p:dataExporter type="pdf" target="dt-employes" fileName="employes" />
+                        </p:commandButton>
+                    </p:toolbarGroup>
+                </p:toolbar>
+
+
                 <div class="card">
                     <p:dataTable var="employe" value="#{employeController.employes}" paginator="true"
                                  rows="8" paginatorPosition="bottom" filterEvent="keyup" filterDelay="200"
@@ -48,7 +79,7 @@
 
                         <p:column headerText="Actions">
 
-                            <p:button icon="pi pi-pencil" value="Modifier" outcome="edit.xhtml" style="margin-right: 5px">
+                            <p:button icon="pi pi-pencil" title="Modifier" outcome="editEmploye.xhtml" style="margin-right: 5px">
                                 <f:param name="id" value="#{employe.idEmploye}" />
                             </p:button>
 
