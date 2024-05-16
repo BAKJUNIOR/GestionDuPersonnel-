@@ -51,12 +51,13 @@ public class LoginContrller implements Serializable {
     public void setRole(String role) {
         this.role = role;
     }
-
     public String login() {
         List<Employe> employes = employeService.getAllEmployes();
         for (Employe employe : employes) {
             if (employe.getCourriel().equals(username) && employe.getNumeroTelephone().equals(password)) {
                 role = "EMPLOYE";
+                // Définir le username dans la session
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
                 return "/views/admin/indexEmploye.xhtml?faces-redirect=true";
             }
         }
@@ -65,6 +66,8 @@ public class LoginContrller implements Serializable {
         for (Responsable responsable : responsables) {
             if (responsable.getCourriel().equals(username) && responsable.getNumeroTelephone().equals(password)) {
                 role = "RESPONSABLE";
+                // Définir le username dans la session
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
                 return "/views/admin/index.xhtml?faces-redirect=true";
             }
         }
