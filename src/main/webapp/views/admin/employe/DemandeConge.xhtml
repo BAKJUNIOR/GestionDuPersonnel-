@@ -20,7 +20,22 @@
               Demande de Congé
             </div>
 
+            <h:form id="leaveRequestForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="dateDebut" value="Date de début :" />
+                    <p:calendar id="dateDebut" value="#{congeController.newConge.dateDebut}" pattern="dd/MM/yyyy" />
 
+                    <h:outputLabel for="dateFin" value="Date de fin :" />
+                    <p:calendar id="dateFin" value="#{congeController.newConge.dateFin}" pattern="dd/MM/yyyy" />
+
+                    <h:outputLabel for="motif" value="Motif :" />
+                    <p:inputText id="motif" value="#{congeController.newConge.motif}" />
+
+                    <h:outputLabel for="submit" value="" />
+                    <p:commandButton id="submit" value="Soumettre" action="#{congeController.createConge}" update=":messages" />
+                </h:panelGrid>
+            </h:form>
+            <p:messages id="messages" showDetail="true" autoUpdate="true"/>
 
         </p:outputPanel>
     </ui:define>

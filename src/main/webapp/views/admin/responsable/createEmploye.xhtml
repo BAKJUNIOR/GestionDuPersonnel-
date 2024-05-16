@@ -14,46 +14,57 @@
     <ui:define name="main">
 
 
-        <p:outputPanel id="container" styleClass="container">
+        <style type="">
+            .centered-form {
+                display: flex;
+                justify-content: center;
+                margin-left:auto;
+            }
+
+        </style>
+
+        <div class="centered-form">
+
+            <p:outputPanel id="container" styleClass="container">
 
                 <div class="title" >
                     Ajouter un employé
                 </div>
 
-                    <h:form id="createEmployeeForm" >
+                <h:form id="createEmployeeForm" >
 
-                        <h:panelGrid id="grid" cellpadding="7" columns="2" styleClass="mb-3">
+                    <h:panelGrid id="grid" cellpadding="7" columns="4" styleClass="mb-4"  style="padding-top: 5px ; font-size: 35px">
 
 
-                            <p:outputLabel for="nom" value="Nom:"/>
-                            <p:inputText id="nom" value="#{employeController.selectedEmploye.nom}" required="true" requiredMessage="Le nom est obligatoire."/>
+                        <p:outputLabel for="nom" value="Nom:"/>
+                        <p:inputText id="nom" value="#{employeController.selectedEmploye.nom}" required="true" requiredMessage="Le nom est obligatoire."/>
 
-                            <p:outputLabel for="adresse" value="Adresse:"/>
-                            <p:inputText id="adresse" value="#{employeController.selectedEmploye.adresse}"/>
+                        <p:outputLabel for="adresse" value="Adresse:"/>
+                        <p:inputText id="adresse" value="#{employeController.selectedEmploye.adresse}"/>
 
-                            <p:outputLabel for="numeroTelephone" value="N° Téléphone:"/>
-                            <p:inputText id="numeroTelephone" value="#{employeController.selectedEmploye.numeroTelephone}"/>
+                        <p:outputLabel for="numeroTelephone" value="N° Téléphone:"/>
+                        <p:inputText id="numeroTelephone" value="#{employeController.selectedEmploye.numeroTelephone}"/>
 
-                            <p:outputLabel for="courriel" value="Courriel:"/>
-                            <p:inputText id="courriel" value="#{employeController.selectedEmploye.courriel}" type="email"  required="true"/>
+                        <p:outputLabel for="courriel" value="Courriel:"/>
+                        <p:inputText id="courriel" value="#{employeController.selectedEmploye.courriel}" type="email"  required="true"/>
 
-                            <p:outputLabel for="poste" value="Poste:"/>
-                            <p:inputText id="poste" value="#{employeController.selectedEmploye.poste}"  required="true"/>
+                        <p:outputLabel for="poste" value="Poste:"/>
+                        <p:inputText id="poste" value="#{employeController.selectedEmploye.poste}"  required="true"/>
 
-                            <p:outputLabel for="salaire" value="Salaire:"/>
-                            <p:inputText id="salaire" value="#{employeController.selectedEmploye.salaire}" type="number"  required="true"/>
+                        <p:outputLabel for="salaire" value="Salaire:"/>
+                        <p:inputText id="salaire" value="#{employeController.selectedEmploye.salaire}" type="number"  required="true"/>
 
-                        </h:panelGrid>
+                    </h:panelGrid>
 
-                        <p:commandButton value="Submit" action="#{employeController.addEmploye}"
-                                         ajax="false" />
+                    <p:commandButton value="Enregistrer" action="#{employeController.addEmploye}"   style="width: 100% ; "
+                                     ajax="false" />
 
-                        <p:messages id="msgs"/>
-                    </h:form>
+                    <p:messages id="msgs"/>
+                </h:form>
 
 
             </p:outputPanel>
-        </ui:define>
-    </ui:composition>
+        </div>
+    </ui:define>
+</ui:composition>
 </html>
-
