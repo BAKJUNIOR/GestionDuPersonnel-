@@ -20,22 +20,24 @@
               Demande de Congé
             </div>
 
-            <h:form id="leaveRequestForm">
-                <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="dateDebut" value="Date de début :" />
-                    <p:calendar id="dateDebut" value="#{congeController.newConge.dateDebut}" pattern="dd/MM/yyyy" />
+            <h:form>
+                <p:panel header="Demande de Congé">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel for="dateDebut" value="Date de Début:"/>
+                        <p:calendar id="dateDebut" value="#{congeController.newConge.dateDebut}" showOn="button" required="true"/>
 
-                    <h:outputLabel for="dateFin" value="Date de fin :" />
-                    <p:calendar id="dateFin" value="#{congeController.newConge.dateFin}" pattern="dd/MM/yyyy" />
+                        <h:outputLabel for="dateFin" value="Date de Fin:"/>
+                        <p:calendar id="dateFin" value="#{congeController.newConge.dateFin}" showOn="button" required="true"/>
 
-                    <h:outputLabel for="motif" value="Motif :" />
-                    <p:inputText id="motif" value="#{congeController.newConge.motif}" />
+                        <h:outputLabel for="motif" value="Motif:"/>
+                        <p:inputText id="motif" value="#{congeController.newConge.motif}" required="true"/>
 
-                    <h:outputLabel for="submit" value="" />
-                    <p:commandButton id="submit" value="Soumettre" action="#{congeController.createConge}" update=":messages" />
-                </h:panelGrid>
+                        <p:commandButton value="Soumettre" action="#{congeController.createConge}" update="messages" ajax="false"/>
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:messages id="messages" showDetail="true"/>
             </h:form>
-            <p:messages id="messages" showDetail="true" autoUpdate="true"/>
 
         </p:outputPanel>
     </ui:define>

@@ -19,6 +19,10 @@ public class Employe {
     private String poste;
     private double salaire;
 
+    @ManyToOne
+    @JoinColumn(name = "id_responsable")
+    private Responsable responsable;
+
     @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL)
     private Set<Conge> conges = new HashSet<>();
 
@@ -88,6 +92,14 @@ public class Employe {
 
     public double getSalaire() {
         return salaire;
+    }
+
+    public Responsable getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(Responsable responsable) {
+        this.responsable = responsable;
     }
 
     public void setSalaire(double salaire) {

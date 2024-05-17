@@ -10,6 +10,7 @@
         <class>com.example.applicationgestinemployes.model.Employe</class>
         <class>com.example.applicationgestinemployes.model.Conge</class>
         <class>com.example.applicationgestinemployes.model.Message</class>
+        <class>com.example.applicationgestinemployes.model.Responsable</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
             <property name="hibernate.hbm2ddl.auto" value="update" />

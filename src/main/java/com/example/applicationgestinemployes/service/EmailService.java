@@ -1,51 +1,55 @@
 package com.example.applicationgestinemployes.service;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.mail.*;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 @RequestScoped
 public class EmailService {
 
+    @Resource(name = "mail/MyMailSession")
     private Session mailSession;
 
-    public EmailService() {
-        try (InputStream input = getClass().getClassLoader().getResourceAsStream("META-INF/javamail.properties")) {
-            Properties properties = new Properties();
-            if (input == null) {
-                throw new RuntimeException("Sorry, unable to find javamail.properties");
-            }
-            properties.load(input);
-            mailSession = Session.getInstance(properties, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(properties.getProperty("mail.smtp.user"),
-                            properties.getProperty("mail.smtp.password"));
-                }
-            });
-        } catch (IOException ex) {
+    private Properties mailProperties;
+
+    @PostConstruct
+    public void init() {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("javamail.properties")) {
+            mailProperties = new Properties();
+            mailProperties.load(input);
+        } catch (Exception ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Failed to load mail properties", ex);
+            // Handle the exception
         }
     }
 
     public void sendEmail(String to, String subject, String content) {
         try {
             MimeMessage message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress("your_email@example.com"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
             message.setText(content);
 
-            Transport.send(message);
+            Transport transport = mailSession.getTransport("smtp");
+            transport.connect(
+                    mailProperties.getProperty("mail.smtp.host"),
+                    mailProperties.getProperty("mail.smtp.user"),
+                    mailProperties.getProperty("mail.smtp.password")
+            );
+            transport.sendMessage(message, message.getAllRecipients());
+            transport.close();
         } catch (MessagingException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            // Handle the exception
         }
     }
 }
