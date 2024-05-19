@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<ui:composition template="/resources/tpl/adminEmploye.xhtml">
+
+
+    <ui:define name="title">
+        <title>Demande de Congé</title>
+    </ui:define>
+    <ui:define name="main">
+
+
+        <p:outputPanel id="container" styleClass="container">
+
+            <div class="title" >
+                Liste des Demandes de Conge
+            </div>
+
+            <h:form id="congeListForm">
+                <p:panel header="Liste des Demandes de Congé">
+                    <p:dataTable id="congeTable" value="#{congeController.pendingConges}" var="conge" rows="10" paginator="true" rowsPerPageTemplate="5,10,15">
+                        <p:column headerText="Employé">
+                            <h:outputText value="#{conge.employe.nom}" />
+                        </p:column>
+                        <p:column headerText="Date de Début">
+                            <h:outputText value="#{conge.dateDebut}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Date de Fin">
+                            <h:outputText value="#{conge.dateFin}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Motif">
+                            <h:outputText value="#{conge.motif}" />
+                        </p:column>
+                        <p:column headerText="Statut">
+                            <h:outputText value="#{conge.statut}" />
+                        </p:column>
+                        <p:column headerText="Actions">
+                            <p:commandButton value="Approuver" action="#{congeController.approuverConge(conge.idConge)}" update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" />
+                            <p:commandButton value="Rejeter" action="#{congeController.rejeterConge(conge.idConge)}" update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </h:form>
+
+        </p:outputPanel>
+    </ui:define>
+</ui:composition>
+</html>
+
+
+
+

@@ -29,23 +29,28 @@ public class CongeService {
     @Transactional
     public void approuverConge(Long congeId) {
         Conge conge = findById(congeId);
-        conge.setStatut("Approuvé");
-        update(conge);
+        if (conge != null) {
+            conge.setStatut("Approuvé");
+            update(conge);
 
-        // Envoyer une notification par e-mail à l'employé
-        emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé approuvée",
-                "Votre demande de congé a été approuvée.");
+            emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé approuvée", "Votre demande de congé a été approuvée.");
+            System.out.println("Conge approuvé : " + congeId);
+        } else {
+            System.out.println("Conge non trouvé : " + congeId);
+        }
     }
 
     @Transactional
     public void rejeterConge(Long congeId) {
         Conge conge = findById(congeId);
-        conge.setStatut("Rejeté");
-        update(conge);
-
-        // Envoyer une notification par e-mail à l'employé
-        emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé rejetée",
-                "Votre demande de congé a été rejetée.");
+        if (conge != null) {
+            conge.setStatut("Rejeté");
+            update(conge);
+            emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé rejetée", "Votre demande de congé a été rejetée.");
+            System.out.println("Conge rejeté : " + congeId);
+        } else {
+            System.out.println("Conge non trouvé : " + congeId);
+        }
     }
 
     public Conge findById(Long id) {
@@ -53,7 +58,7 @@ public class CongeService {
     }
 
     public List<Conge> findAllPending() {
-        return em.createQuery("SELECT c FROM Conge c WHERE c.statut = 'En attente'", Conge.class).getResultList();
+        return em.createQuery("SELECT c FROM Conge c WHERE c.statut = 'EN_ATTENTE'", Conge.class).getResultList();
     }
 
     @Transactional
@@ -62,8 +67,8 @@ public class CongeService {
     }
 
     public void sendLeaveRequestNotificationToManager(String managerEmail, String employeeName, String leaveStartDate, String leaveEndDate) {
-        String subject = "Nouvelle demande de congé";
-        String content = String.format("L'employé %s a demandé un congé du %s au %s.", employeeName, leaveStartDate, leaveEndDate);
+        String subject = "Nouvelle demande de congé de " + employeeName;
+        String content = "L'employé " + employeeName + " a demandé un congé du " + leaveStartDate + " au " + leaveEndDate + ".";
         emailService.sendEmail(managerEmail, subject, content);
     }
 

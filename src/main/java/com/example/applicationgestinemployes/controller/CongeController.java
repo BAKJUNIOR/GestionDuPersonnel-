@@ -47,6 +47,18 @@ public class CongeController implements Serializable {
         return "success"; // Rediriger vers une page de succès si nécessaire
     }
 
+
+    public void approuverConge(Long congeId) {
+        congeService.approuverConge(congeId);
+        pendingConges = congeService.findAllPending(); // Rafraîchir la liste
+    }
+
+    public void rejeterConge(Long congeId) {
+        congeService.rejeterConge(congeId);
+        pendingConges = congeService.findAllPending(); // Rafraîchir la liste
+    }
+
+
     public Employe getLoggedInEmploye() {
         String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
         if (username != null) {

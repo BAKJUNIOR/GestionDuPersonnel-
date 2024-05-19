@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <ui:insert name="title">
+        <title>Default title</title>
+    </ui:insert>
+
+
+    <h:outputStylesheet library="css" name="main.css"/>
+    <h:outputStylesheet library="css" name="primeflex.min.css"/>
+    <h:outputStylesheet library="css" name="theme.css"/>
+
+
+</h:head>
+<h:body>
+    <h:form id="mainForm">
+
+
+
+        <div class="header p-shadow-1">
+            <div>
+                <h3 style=" display: inline-block; margin-left: 85%; width: 50px;  border-radius: 4px;">
+                    <h:outputText value=" #{sessionScope['username']}" style="color: black; background-color: #0b7ad1;"/>
+                </h3>
+            </div>
+        </div>
+
+
+        <div class="sidebar p-shadow-1">
+            <h3 style="color: white ; font-size: 20px">Staff_Stream</h3>
+            <p:menu styleClass="menu" style="padding-top: 10px">
+                <p:menuitem icon="pi pi-home" value="Tableau de bord"
+                            outcome="/views/admin/index.xhtml" styleClass="menu-item-dashboard"/>
+                <p:menuitem icon="pi pi-users" value="Gestion des employés"
+                            outcome="/views/admin/responsable/listEmploye.xhtml" styleClass="menu-item" />
+                <p:separator/>
+                <p:menuitem icon="pi pi-calendar" value="Gestion des congés"
+                            outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
+                <p:separator/>
+                <p:menuitem icon="pi pi-envelope" value="Messagerie interne"
+                            outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
+                <p:separator/>
+            </p:menu>
+
+
+
+            <p:menu styleClass="menu" style="margin-top: 100%;">
+                <p:menuitem icon="pi pi-sign-out" value="Se déconnecter"  action="#{loginContrller.logout}"/>
+            </p:menu>
+        </div>
+
+        <p:outputPanel id="main">
+            <ui:insert name="main">
+                <div>Default main content</div>
+            </ui:insert>
+        </p:outputPanel>
+
+    </h:form>
+</h:body>
+</html>
+
