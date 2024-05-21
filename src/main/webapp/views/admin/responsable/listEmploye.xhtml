@@ -27,34 +27,27 @@
 
         <p:outputPanel id="container" styleClass="container">
 
-
-
             <h:form id="employesTable">
 
                 <p:toolbar>
                     <p:toolbarGroup>
-                        <h:button value="Ajouter un employé" outcome="createEmploye.xhtml" styleClass="newEmployé"    >
-
-                        </h:button>
-
+                        <h:button value="Ajouter un employé" outcome="createEmploye.xhtml" styleClass="newEmployé"/>
                     </p:toolbarGroup>
+
                     <p:toolbarGroup align="right">
-                        <p:commandButton value="Export liste des employés" icon="pi pi-upload" styleClass="ui-button-help" ajax="false">
+                        <p:commandButton value="Exporter la liste des employés" icon="pi pi-upload" styleClass="ui-button-help" ajax="false">
                             <p:dataExporter type="pdf" target="dt-employes" fileName="employes" />
                         </p:commandButton>
                     </p:toolbarGroup>
                 </p:toolbar>
 
-
                 <div class="card">
-                    <p:dataTable var="employe" value="#{employeController.employes}" paginator="true"
+                    <p:dataTable id="dt-employes" var="employe" value="#{employeController.employes}" paginator="true"
                                  rows="8" paginatorPosition="bottom" filterEvent="keyup" filterDelay="200"
                                  lazy="false" currentPageReportTemplate="({currentPage} de {totalPages}, Total de {totalRecords} employés)">
 
-
-
-                        <p:column headerText="Nom" filterBy="#{employe.nom}" filterMatchMode="contains">
-                      <strong> <h:outputText value="#{employe.nom}" /> </strong>
+                        <p:column headerText="Nom complet" filterBy="#{employe.nom}" filterMatchMode="contains">
+                            <strong><h:outputText value="#{employe.nom}" /></strong>
                         </p:column>
 
                         <p:column headerText="Adresse" filterBy="#{employe.adresse}" filterMatchMode="contains">
@@ -66,7 +59,7 @@
                         </p:column>
 
                         <p:column headerText="Couriel" filterBy="#{employe.courriel}" filterMatchMode="contains">
-                        <strong> <h:outputText value="#{employe.courriel}" /></strong>
+                            <strong><h:outputText value="#{employe.courriel}" /></strong>
                         </p:column>
 
                         <p:column headerText="Poste" filterBy="#{employe.poste}" filterMatchMode="contains">
@@ -74,19 +67,16 @@
                         </p:column>
 
                         <p:column headerText="Salaire" filterBy="#{employe.salaire}" filterMatchMode="contains">
-                          <strong> <h:outputText value="#{employe.salaire}" /> </strong>
+                            <strong><h:outputText value="#{employe.salaire}" /></strong>
                         </p:column>
 
                         <p:column headerText="Actions">
-
                             <p:button icon="pi pi-pencil" title="Modifier" outcome="editEmploye.xhtml" style="margin-right: 5px">
                                 <f:param name="id" value="#{employe.idEmploye}" />
                             </p:button>
 
-
-
-                            <p:commandButton icon="pi pi-trash" title="Supprimer" action="#{employeController.deleteEmploye}" id="btnForm" process="@this" ajax="false" style="background-color: red ; border: black">
-                                <f:setPropertyActionListener target="#{employeController.selectedEmploye}" value="#{employe}"  />
+                            <p:commandButton icon="pi pi-trash" title="Supprimer" action="#{employeController.deleteEmploye}" id="btnForm" process="@this" ajax="false" style="background-color: red; border: black">
+                                <f:setPropertyActionListener target="#{employeController.selectedEmploye}" value="#{employe}" />
                                 <f:ajax execute="@this" render="@form"/>
                             </p:commandButton>
                         </p:column>
@@ -94,14 +84,9 @@
                     </p:dataTable>
                 </div>
 
-
-
-
             </h:form>
 
         </p:outputPanel>
     </ui:define>
 </ui:composition>
 </html>
-
-

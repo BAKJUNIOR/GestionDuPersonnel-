@@ -12,6 +12,20 @@
     </ui:define>
     <ui:define name="main">
 
+        <style type="">
+            .HistConge {
+                border: 1px solid #dee2e6;
+                background: #f8f9fa;
+                font-size: 16px;
+                background-color: #1882ffd4;
+                color: #ffffff;
+                padding: 0.5rem;
+                border-radius: 4px;
+                margin-right: .5rem;
+
+            }
+        </style>
+
 
         <p:outputPanel id="container" styleClass="container">
 
@@ -19,9 +33,19 @@
                 Liste des Demandes de Conge
             </div>
 
+
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <h:button value="Voir l'historique des demandes de congé (approuvé ou rejeté)" outcome="historiqueConge.xhtml" styleClass="HistConge"    >
+                    </h:button>
+
+                </p:toolbarGroup>
+
+            </p:toolbar>
+
             <h:form id="congeListForm">
                 <p:panel header="Liste des Demandes de Congé">
-                    <p:dataTable id="congeTable" value="#{congeController.pendingConges}" var="conge" rows="10" paginator="true" rowsPerPageTemplate="5,10,15">
+                    <p:dataTable id="congeTable" value="#{congeController.pendingConges}" var="conge" rows="10" paginator="true" >
                         <p:column headerText="Employé">
                             <h:outputText value="#{conge.employe.nom}" />
                         </p:column>
@@ -39,11 +63,15 @@
                             <h:outputText value="#{conge.motif}" />
                         </p:column>
                         <p:column headerText="Statut">
-                            <h:outputText value="#{conge.statut}" />
+                            <h:outputText value="#{conge.statut }" style="color: rgba(236,183,3,0.85)" />
                         </p:column>
                         <p:column headerText="Actions">
-                            <p:commandButton value="Approuver" action="#{congeController.approuverConge(conge.idConge)}" update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" />
-                            <p:commandButton value="Rejeter" action="#{congeController.rejeterConge(conge.idConge)}" update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" />
+                            <p:commandButton icon="pi pi-check" styleClass="rounded-button ui-button-outlined" title="Approuver" action="#{congeController.approuverConge(conge.idConge)}"
+                                             update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" ajax="false" style="margin-right: 5px ; border: black"/>
+
+
+                            <p:commandButton icon="pi pi-times" styleClass="rounded-button ui-button-danger ui-button-outlined" title="Rejeter"  action="#{congeController.rejeterConge(conge.idConge)}"
+                                              update=":congeListForm:congeTable" rendered="#{conge.statut eq 'EN_ATTENTE'}" ajax="false" style="  border: black"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

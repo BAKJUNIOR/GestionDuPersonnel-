@@ -6,25 +6,74 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 <ui:composition template="/resources/tpl/admin.xhtml">
-
     <ui:define name="title">
-        <title>Message interne</title>
+        <title>Messagerie</title>
     </ui:define>
+
     <ui:define name="main">
+        <style type="">
+            .centered-form {
+                display: flex;
+                justify-content: center;
+                margin-left:auto;
+            }
+        </style>
+
+        <div class="centered-form">
+            <p:outputPanel id="container" styleClass="container">
+                <div class="title">
+                    Messagerie
+                </div>
+
+                <h:form id="messagesForm">
+                    <p:panel header="Envoyer un message">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel  value="Destinataires:"/>
+                            <p:selectCheckboxMenu id="multiple" value="#{messageController.selectedEmployees}"
+                                                  filter="true" filterMatchMode="startsWith" label="Sélectionner des employés"
+                                                  emptyLabel="Veuillez sélectionner..." updateLabel="true" style="min-width: 15rem"
+                                                  panelStyle="width: 30rem" scrollHeight="250" required="true"
+                                                  requiredMessage="Veuillez sélectionner au moins un destinataire">
+                                <f:selectItems value="#{messageController.allEmployees}" var="employee"
+                                               itemLabel="#{employee.nom}" itemValue="#{employee}"/>
+                            </p:selectCheckboxMenu>
 
 
-        <p:outputPanel id="container" styleClass="container">
 
-            <div class="title" >
-                Message interne
-            </div>
+                            <h:outputLabel for="subject" value="Sujet:"/>
+                            <p:inputText id="subject" value="#{messageController.newMessage.sujet}" required="true" requiredMessage="Le sujet est requis"/>
+
+                            <h:outputLabel for="content" value="Message:"/>
+                            <p:inputTextarea id="content" value="#{messageController.newMessage.contenu}" required="true" requiredMessage="Le contenu du message est requis" rows="6" cols="30"/>
+                        </h:panelGrid>
 
 
-        </p:outputPanel>
+                        <p:commandButton value="Envoyer" action="#{messageController.sendMessage}" update="messagesForm:messages" process="@this, receiver, subject, content" ajax="false"/>
+                    </p:panel>
+
+                    <p:messages id="messages" showDetail="true" autoUpdate="true"/>
+
+                    <p:panel header="Messages reçus">
+                        <p:dataTable id="messagesTable" value="#{messageController.employeeMessages}" var="message" rows="10" paginator="true">
+                            <p:column headerText="Expéditeur">
+                                <h:outputText value="#{message.responsable.nom}" />
+                            </p:column>
+                            <p:column headerText="Sujet">
+                                <h:outputText value="#{message.sujet}" />
+                            </p:column>
+                            <p:column headerText="Message">
+                                <h:outputText value="#{message.contenu}" />
+                            </p:column>
+                            <p:column headerText="Date">
+                                <h:outputText value="#{message.dateEnvoi}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+            </p:outputPanel>
+        </div>
     </ui:define>
 </ui:composition>
 </html>
-
-
-
-

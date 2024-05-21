@@ -25,10 +25,19 @@ public class CongeController implements Serializable {
 
     private Conge newConge = new Conge();
     private List<Conge> pendingConges;
+    private List<Conge> findAllCongeAll;
+
+
+    private List<Conge> employeeConges; // Ajouter une liste pour stocker les congés de l'employé
 
     @PostConstruct
     public void init() {
+        findAllCongeAll = congeService.findAllCongeAll();
         pendingConges = congeService.findAllPending();
+        Employe employe = getLoggedInEmploye();
+        if (employe != null) {
+            employeeConges = congeService.findCongesByEmploye(employe);
+        }
     }
 
     public String createConge() {
@@ -47,7 +56,7 @@ public class CongeController implements Serializable {
                 congeService.sendLeaveRequestNotificationToManager(managerEmail, employeeName, leaveStartDate, leaveEndDate);
             }
 
-            return "success"; // Rediriger vers une page de succès si nécessaire
+            return "success";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé non trouvé"));
             return null;
@@ -91,5 +100,22 @@ public class CongeController implements Serializable {
 
     public void setPendingConges(List<Conge> pendingConges) {
         this.pendingConges = pendingConges;
+    }
+
+    public List<Conge> getEmployeeConges() { // Ajouter un getter pour les congés de l'employé
+        return employeeConges;
+    }
+
+    public void setEmployeeConges(List<Conge> employeeConges) {
+        this.employeeConges = employeeConges;
+    }
+
+
+    public List<Conge> getFindAllCongeAll() {
+        return findAllCongeAll;
+    }
+
+    public void setFindAllCongeAll(List<Conge> findAllCongeAll) {
+        this.findAllCongeAll = findAllCongeAll;
     }
 }

@@ -5,50 +5,71 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <ui:composition template="/resources/tpl/admin.xhtml">
-        <ui:define name="title">
-            <title>Modifier employé </title>
-        </ui:define>
-        <ui:define name="main">
+<ui:composition template="/resources/tpl/admin.xhtml">
+    <ui:define name="title">
+        <title>Modifier employé </title>
+    </ui:define>
+    <ui:define name="main">
 
-            <p:outputPanel id="container" styleClass="container">
-                <div class="title">
-                    Edit
-                </div>
+        <style type="">
+            .centered-form {
+                display: flex;
+                justify-content: center;
+                margin-left:auto;
+            }
 
-                <h:form id="updateForm">
-                    <p:panel header="Modifier Employé">
-                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
-                        <p:panelGrid columns="2">
-                            <h:outputLabel value="Nom:" />
-                            <p:inputText value="#{employeController.selectedEmploye.nom}" />
+        </style>
 
-                            <h:outputLabel value="Adresse:" />
-                            <p:inputText value="#{employeController.selectedEmploye.adresse}" />
+        <div class="centered-form">
 
+        <p:outputPanel id="container" styleClass="container">
+            <div class="title">
+                Modifier les informations de l'employé
+            </div>
 
-                            <h:outputLabel value="Poste:" />
-                            <p:inputText value="#{employeController.selectedEmploye.poste}" />
+            <h:form id="updateForm">
+                <p:panel header="Modifier Employé">
+                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                    <h:panelGrid id="grid" cellpadding="7" columns="4" styleClass="mb-4"  style="padding-top: 5px ; font-size: 18px">
 
+                        <h:outputLabel value="Username:" />
+                        <p:inputText value="#{employeController.selectedEmploye.username}" />
 
-                            <h:outputLabel value="N° Télépphone:" />
-                            <p:inputText value="#{employeController.selectedEmploye.numeroTelephone}" />
+                        <h:outputLabel value="Password:" />
+                        <p:inputText value="#{employeController.selectedEmploye.password}" />
 
-                            <h:outputLabel value="Couriel:" />
-                            <p:inputText value="#{employeController.selectedEmploye.courriel}" />
+                        <h:outputLabel value="Nom complet:" />
+                        <p:inputText value="#{employeController.selectedEmploye.nom}" />
 
-                            <h:outputLabel value="Salaire:" />
-                            <p:inputText value="#{employeController.selectedEmploye.salaire}"/>
-
-                        </p:panelGrid>
-
-                        <p:commandButton value="Modifier" action="#{employeController.updateEmploye}" process="@form" update="messages" ajax="false"/>
-                    </p:panel>
-                </h:form>
+                        <h:outputLabel value="Adresse:" />
+                        <p:inputText value="#{employeController.selectedEmploye.adresse}" />
 
 
-            </p:outputPanel>
-        </ui:define>
-    </ui:composition>
+                        <h:outputLabel value="Poste:" />
+                        <p:inputText value="#{employeController.selectedEmploye.poste}" />
+
+
+                        <h:outputLabel value="N° Télépphone:" />
+                        <p:inputText value="#{employeController.selectedEmploye.numeroTelephone}" />
+
+                        <h:outputLabel value="Couriel:" />
+                        <p:inputText value="#{employeController.selectedEmploye.courriel}" />
+
+                        <h:outputLabel value="Salaire:" />
+                        <p:inputText value="#{employeController.selectedEmploye.salaire}"/>
+
+                    </h:panelGrid>
+
+                    <p:commandButton value="Modifier" action="#{employeController.updateEmploye}" process="@form" update="messages" ajax="false"/>
+                </p:panel>
+
+            </h:form>
+
+
+        </p:outputPanel>
+
+        </div>
+    </ui:define>
+</ui:composition>
 </html>
 

@@ -60,16 +60,28 @@ public class CongeService {
     public List<Conge> findAllPending() {
         return em.createQuery("SELECT c FROM Conge c WHERE c.statut = 'EN_ATTENTE'", Conge.class).getResultList();
     }
+    public List<Conge> findAllCongeAll() {
+        return em.createQuery("SELECT c FROM Conge c ", Conge.class).getResultList();
+    }
+
+
+
 
     @Transactional
     public void update(Conge conge) {
         em.merge(conge);
     }
 
-    public void sendLeaveRequestNotificationToManager(String managerEmail, String employeeName, String leaveStartDate, String leaveEndDate) {
+    public void sendLeaveRequestNotificationToManager(String managerEmail, String employeeName, String leaveStartDate, String leaveEndDate ) {
         String subject = "Nouvelle demande de congé de " + employeeName;
         String content = "L'employé " + employeeName + " a demandé un congé du " + leaveStartDate + " au " + leaveEndDate + ".";
-        emailService.sendEmail(managerEmail, subject, content);
+        emailService.sendEmail(managerEmail, subject, content );
+    }
+
+    public List<Conge> findCongesByEmploye(Employe employe) {
+        return em.createQuery("SELECT c FROM Conge c WHERE c.employe = :employe", Conge.class)
+                .setParameter("employe", employe)
+                .getResultList();
     }
 
 }

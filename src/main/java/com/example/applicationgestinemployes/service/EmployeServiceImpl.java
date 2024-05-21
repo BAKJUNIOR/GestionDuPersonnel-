@@ -19,6 +19,15 @@ public class EmployeServiceImpl implements EmployeService {
         return em.createQuery("SELECT e FROM Employe e", Employe.class).getResultList();
     }
 
+    public Employe findByUsername(String username) {
+        try {
+            return em.createQuery("SELECT e FROM Employe e WHERE e.username = :username", Employe.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
     @Override
     public Employe getEmploye(Long id) {
         return em.find(Employe.class, id);

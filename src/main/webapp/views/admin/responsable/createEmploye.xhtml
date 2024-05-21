@@ -11,6 +11,7 @@
     <ui:define name="title">
         <title>Enregistrer un employés</title>
     </ui:define>
+
     <ui:define name="main">
 
 
@@ -36,17 +37,23 @@
                     <h:panelGrid id="grid" cellpadding="7" columns="4" styleClass="mb-4"  style="padding-top: 5px ; font-size: 35px">
 
 
+                        <p:outputLabel for="Username" value="Username:"/>
+                        <p:inputText id="Username" value="#{employeController.selectedEmploye.username}" required="true" requiredMessage="Le Username est obligatoire."/>
+
                         <p:outputLabel for="nom" value="Nom:"/>
-                        <p:inputText id="nom" value="#{employeController.selectedEmploye.nom}" required="true" requiredMessage="Le nom est obligatoire."/>
+                        <p:inputText id="nom" value="#{employeController.selectedEmploye.nom}" required="true"/>
 
                         <p:outputLabel for="adresse" value="Adresse:"/>
                         <p:inputText id="adresse" value="#{employeController.selectedEmploye.adresse}"/>
+
+                        <p:outputLabel for="Password" value="Password:"/>
+                        <p:inputText id="Password" value="#{employeController.selectedEmploye.password}" required="true" requiredMessage="le password est obligatoire."/>
 
                         <p:outputLabel for="numeroTelephone" value="N° Téléphone:"/>
                         <p:inputText id="numeroTelephone" value="#{employeController.selectedEmploye.numeroTelephone}"/>
 
                         <p:outputLabel for="courriel" value="Courriel:"/>
-                        <p:inputText id="courriel" value="#{employeController.selectedEmploye.courriel}" type="email"  required="true"/>
+                        <p:inputText id="courriel" value="#{employeController.selectedEmploye.courriel}" type="email"  required="true" requiredMessage="l'email est obligatoire."/>
 
                         <p:outputLabel for="poste" value="Poste:"/>
                         <p:inputText id="poste" value="#{employeController.selectedEmploye.poste}"  required="true"/>

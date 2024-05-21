@@ -1,33 +1,30 @@
 package com.example.applicationgestinemployes.service;
 
 import com.example.applicationgestinemployes.model.Message;
+import com.example.applicationgestinemployes.model.Employe;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 
 @RequestScoped
 public class MessageService {
+
     @PersistenceContext(unitName = "GestEmploye_dbConfig")
     private EntityManager em;
 
-    public void create(Message message) {
+    @Transactional
+    public void sendMessage(Message message) {
+        message.setDateEnvoi(new Date());
         em.persist(message);
     }
 
-    public void update(Message message) {
-        em.merge(message);
-    }
-
-    public void delete(Message message) {
-        em.remove(em.merge(message));
-    }
-
-    public Message findById(Long id) {
-        return em.find(Message.class, id);
-    }
-
-    public List<Message> findAll() {
-        return em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
+    public List<Message> getMessagesForEmployee(Long employeeId) {
+        return em.createQuery("SELECT m FROM Message m JOIN m.destinataires d WHERE d.idEmploye = :employeeId", Message.class)
+                .setParameter("employeeId", employeeId)
+                .getResultList();
     }
 }

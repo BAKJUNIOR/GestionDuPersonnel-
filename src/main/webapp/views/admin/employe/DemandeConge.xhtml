@@ -15,17 +15,19 @@
                 Demande de Congé
             </div>
 
-
             <h:form styleClass="form-container">
                 <p:panel header="Demande de Congé">
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="padding-top: 25px;">
                         <h:outputLabel for="dateDebut" value="Date de Début:"/>
-                        <p:calendar id="dateDebut" value="#{congeController.newConge.dateDebut}" showOn="button" required="true"/>
+                        <p:calendar id="dateDebut" value="#{congeController.newConge.dateDebut}" showOn="button" required="true" locale="fr" pattern="dd/MM/yyyy"/>
+
                         <h:outputLabel for="dateFin" value="Date de Fin:"/>
-                        <p:calendar id="dateFin" value="#{congeController.newConge.dateFin}" showOn="button" required="true"/>
+                        <p:calendar id="dateFin" value="#{congeController.newConge.dateFin}" showOn="button" required="true" locale="fr" pattern="dd/MM/yyyy"/>
+
                         <h:outputLabel for="motif" value="Motif:"/>
-                        <p:inputText id="motif" value="#{congeController.newConge.motif}" required="true"/>
-                        <p:commandButton value="Soumettre" action="#{congeController.createConge}" update="messages" ajax="false"/>
+                        <p:inputText id="motif" value="#{congeController.newConge.motif}" required="true" style="width: 100%;"/>
+
+                        <p:commandButton value="Soumettre" action="#{congeController.createConge}" update="messages" ajax="false" style="width: 200px; height: 50px;"/>
                     </h:panelGrid>
                 </p:panel>
                 <p:messages id="messages" showDetail="true"/>
