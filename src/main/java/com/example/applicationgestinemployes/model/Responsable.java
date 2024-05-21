@@ -16,7 +16,7 @@ public class Responsable {
     private String adresse;
     private String numeroTelephone;
     private String courriel;
-
+    private String password;
 
     @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
     private Set<Message> messagesEnvoyes = new HashSet<>();
@@ -62,6 +62,15 @@ public class Responsable {
     public void setCourriel(String courriel) {
         this.courriel = courriel;
     }
+
+    public String getPassword() {
+        return password;  // Getter pour le mot de passe
+    }
+
+    public void setPassword(String password) {
+        this.password = password;  // Setter pour le mot de passe
+    }
+
 
     public Set<Message> getMessagesEnvoyes() {
         return messagesEnvoyes;

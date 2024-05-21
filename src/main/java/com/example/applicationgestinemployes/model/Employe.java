@@ -1,7 +1,6 @@
 package com.example.applicationgestinemployes.model;
 
 import jakarta.persistence.*;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,6 +17,8 @@ public class Employe {
     private String courriel;
     private String poste;
     private double salaire;
+    private String password;  // Ajout du champ pour le mot de passe
+    private String username;  // Ajout du champ pour le nom d'utilisateur
 
     @ManyToOne
     @JoinColumn(name = "id_responsable")
@@ -26,21 +27,10 @@ public class Employe {
     @OneToMany(mappedBy = "employe", cascade = CascadeType.ALL)
     private Set<Conge> conges = new HashSet<>();
 
-
-
-    public Set<Message> getMessagesRecus() {
-        return messagesRecus;
-    }
-
-    public void setMessagesRecus(Set<Message> messagesRecus) {
-        this.messagesRecus = messagesRecus;
-    }
-
     @ManyToMany(mappedBy = "destinataires")
     private Set<Message> messagesRecus = new HashSet<>();
 
     // Getters and setters
-
 
     public Long getIdEmploye() {
         return idEmploye;
@@ -94,16 +84,32 @@ public class Employe {
         return salaire;
     }
 
+    public void setSalaire(double salaire) {
+        this.salaire = salaire;
+    }
+
+    public String getPassword() {
+        return password;  // Getter pour le mot de passe
+    }
+
+    public void setPassword(String password) {
+        this.password = password;  // Setter pour le mot de passe
+    }
+
+    public String getUsername() {
+        return username;  // Getter pour le nom d'utilisateur
+    }
+
+    public void setUsername(String username) {
+        this.username = username;  // Setter pour le nom d'utilisateur
+    }
+
     public Responsable getResponsable() {
         return responsable;
     }
 
     public void setResponsable(Responsable responsable) {
         this.responsable = responsable;
-    }
-
-    public void setSalaire(double salaire) {
-        this.salaire = salaire;
     }
 
     public Set<Conge> getConges() {
@@ -114,5 +120,11 @@ public class Employe {
         this.conges = conges;
     }
 
+    public Set<Message> getMessagesRecus() {
+        return messagesRecus;
+    }
 
+    public void setMessagesRecus(Set<Message> messagesRecus) {
+        this.messagesRecus = messagesRecus;
+    }
 }

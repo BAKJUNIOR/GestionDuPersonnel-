@@ -22,16 +22,20 @@
 
 
         <div class="header p-shadow-1">
-            <div>
-                <h3 style=" display: inline-block; margin-left: 85%; width: 50px;  border-radius: 4px;">
-                    <h:outputText value=" #{sessionScope['username']}" style="color: black; background-color: #0b7ad1;"/>
+            <div style="display: flex; align-items: center;">
+                <h3 style="margin-left: auto;">
+                    <h:outputText value="#{sessionScope['username']}" style="color: black; padding: 5px; border-radius: 4px;"/>
                 </h3>
+                <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined" style="font-size: 80px; margin-left: 5px;" />
             </div>
         </div>
 
 
+
+
         <div class="sidebar p-shadow-1">
-            <h3 style="color: white ; font-size: 20px">Staff_Stream</h3>
+            <h3 style="color: white ; font-size: 20px">Staff_Stream
+                <img src="#{request.contextPath}/resources/img/favicon.ico" alt=""/>  </h3>
             <p:menu styleClass="menu" style="padding-top: 10px">
                 <p:menuitem icon="pi pi-home" value="Tableau de bord"
                             outcome="/views/admin/index.xhtml" styleClass="menu-item-dashboard"/>
@@ -42,7 +46,7 @@
                             outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
                 <p:separator/>
                 <p:menuitem icon="pi pi-envelope" value="Messagerie interne"
-                            outcome="/views/admin/responsable/listConge.xhtml " styleClass="menu-item"/>
+                            outcome="/views/admin/responsable/MessageInterne.xhtml " styleClass="menu-item"/>
                 <p:separator/>
             </p:menu>
 

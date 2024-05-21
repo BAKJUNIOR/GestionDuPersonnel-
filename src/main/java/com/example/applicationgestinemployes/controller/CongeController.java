@@ -6,10 +6,10 @@ import com.example.applicationgestinemployes.service.CongeService;
 import com.example.applicationgestinemployes.service.EmployeService;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,20 +33,26 @@ public class CongeController implements Serializable {
 
     public String createConge() {
         Employe employe = getLoggedInEmploye();
-        newConge.setEmploye(employe);
-        newConge.setStatut("EN_ATTENTE");
-        congeService.create(newConge);
+        if (employe != null) {
+            newConge.setEmploye(employe);
+            newConge.setStatut("EN_ATTENTE");
+            congeService.create(newConge);
 
-        // Envoyer une notification par e-mail au responsable
-        String managerEmail = employe.getResponsable().getCourriel();
-        String employeeName = employe.getNom();
-        String leaveStartDate = newConge.getDateDebut().toString();
-        String leaveEndDate = newConge.getDateFin().toString();
-        congeService.sendLeaveRequestNotificationToManager(managerEmail, employeeName, leaveStartDate, leaveEndDate);
+            // Envoyer une notification par e-mail au responsable
+            if (employe.getResponsable() != null) {
+                String managerEmail = employe.getResponsable().getCourriel();
+                String employeeName = employe.getNom();
+                String leaveStartDate = newConge.getDateDebut().toString();
+                String leaveEndDate = newConge.getDateFin().toString();
+                congeService.sendLeaveRequestNotificationToManager(managerEmail, employeeName, leaveStartDate, leaveEndDate);
+            }
 
-        return "success"; // Rediriger vers une page de succès si nécessaire
+            return "success"; // Rediriger vers une page de succès si nécessaire
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé non trouvé"));
+            return null;
+        }
     }
-
 
     public void approuverConge(Long congeId) {
         congeService.approuverConge(congeId);
@@ -58,13 +64,12 @@ public class CongeController implements Serializable {
         pendingConges = congeService.findAllPending(); // Rafraîchir la liste
     }
 
-
     public Employe getLoggedInEmploye() {
         String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
         if (username != null) {
             List<Employe> employes = employeService.getAllEmployes();
             for (Employe employe : employes) {
-                if (employe.getCourriel().equals(username)) {
+                if (employe.getUsername().equals(username)) {
                     return employe;
                 }
             }

@@ -2,7 +2,6 @@ package com.example.applicationgestinemployes.controller;
 
 import com.example.applicationgestinemployes.model.Employe;
 import com.example.applicationgestinemployes.model.Responsable;
-import com.example.applicationgestinemployes.service.EmployeService;
 import com.example.applicationgestinemployes.service.EmployeServiceImpl;
 import com.example.applicationgestinemployes.service.ResponsableService;
 import jakarta.enterprise.context.SessionScoped;
@@ -51,22 +50,23 @@ public class LoginContrller implements Serializable {
     public void setRole(String role) {
         this.role = role;
     }
+
     public String login() {
+        // Vérifier les informations de connexion pour les employés
         List<Employe> employes = employeService.getAllEmployes();
         for (Employe employe : employes) {
-            if (employe.getCourriel().equals(username) && employe.getNumeroTelephone().equals(password)) {
+            if (employe.getUsername().equals(username) && employe.getPassword().equals(password)) {
                 role = "EMPLOYE";
-                // Définir le username dans la session
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
                 return "/views/admin/indexEmploye.xhtml?faces-redirect=true";
             }
         }
 
+        // Vérifier les informations de connexion pour les responsables
         List<Responsable> responsables = responsableService.findAll();
         for (Responsable responsable : responsables) {
-            if (responsable.getCourriel().equals(username) && responsable.getNumeroTelephone().equals(password)) {
+            if (responsable.getNom().equals(username) && responsable.getPassword().equals(password)) {
                 role = "RESPONSABLE";
-                // Définir le username dans la session
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
                 return "/views/admin/index.xhtml?faces-redirect=true";
             }
@@ -83,6 +83,7 @@ public class LoginContrller implements Serializable {
         }
         return "/login.xhtml?faces-redirect=true";
     }
+
     public boolean isEmploye() {
         return "EMPLOYE".equals(role);
     }

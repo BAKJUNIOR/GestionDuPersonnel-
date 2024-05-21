@@ -20,12 +20,14 @@
     <h:form id="mainForm">
 
         <div class="header p-shadow-1">
-            <div>
-                <h3 style=" display: inline-block; margin-left: 85%; width: 50px;  border-radius: 4px;">
-                    <h:outputText value=" #{sessionScope['username']}" style="color: black; background-color: #0b7ad1;"/>
+            <div style="display: flex; align-items: center;">
+                <h3 style="margin-left: auto;">
+                    <h:outputText value="#{sessionScope['username']}" style="color: black; padding: 5px; border-radius: 4px;"/>
                 </h3>
+                <p:button icon="pi pi-user" styleClass="rounded-button ui-button-info ui-button-outlined" style="font-size: 80px; margin-left: 5px;" />
             </div>
         </div>
+
 
         <div class="sidebar p-shadow-1">
             <h3 style="color: white ; font-size: 20px">Staff_Stream</h3>
@@ -35,7 +37,7 @@
                 <p:menuitem icon="pi pi-users" value="Demande Congé"
                             outcome="/views/admin/employe/DemandeConge.xhtml" styleClass="menu-item" />
                 <p:separator/>
-                <p:menuitem icon="pi pi-calendar" value="Historique demande congé"
+                <p:menuitem icon="pi pi-calendar" value="Historique des conges"
                             outcome="/views/admin/employe/historiqueConge.xhtml " styleClass="menu-item"/>
                 <p:separator/>
 
