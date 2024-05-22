@@ -30,4 +30,14 @@ public class ResponsableService {
     public List<Responsable> findAll() {
         return em.createQuery("SELECT r FROM Responsable r", Responsable.class).getResultList();
     }
+
+    public Responsable findByCourriel(String courriel) {
+        try {
+            return em.createQuery("SELECT r FROM Responsable r WHERE r.courriel = :courriel", Responsable.class)
+                    .setParameter("courriel", courriel)
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

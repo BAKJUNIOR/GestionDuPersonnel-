@@ -26,9 +26,7 @@ public class CongeController implements Serializable {
     private Conge newConge = new Conge();
     private List<Conge> pendingConges;
     private List<Conge> findAllCongeAll;
-
-
-    private List<Conge> employeeConges; // Ajouter une liste pour stocker les congés de l'employé
+    private List<Conge> employeeConges;
 
     @PostConstruct
     public void init() {
@@ -47,7 +45,6 @@ public class CongeController implements Serializable {
             newConge.setStatut("EN_ATTENTE");
             congeService.create(newConge);
 
-            // Envoyer une notification par e-mail au responsable
             if (employe.getResponsable() != null) {
                 String managerEmail = employe.getResponsable().getCourriel();
                 String employeeName = employe.getNom();
@@ -65,12 +62,12 @@ public class CongeController implements Serializable {
 
     public void approuverConge(Long congeId) {
         congeService.approuverConge(congeId);
-        pendingConges = congeService.findAllPending(); // Rafraîchir la liste
+        pendingConges = congeService.findAllPending();
     }
 
     public void rejeterConge(Long congeId) {
         congeService.rejeterConge(congeId);
-        pendingConges = congeService.findAllPending(); // Rafraîchir la liste
+        pendingConges = congeService.findAllPending();
     }
 
     public Employe getLoggedInEmploye() {
@@ -84,6 +81,11 @@ public class CongeController implements Serializable {
             }
         }
         return null;
+    }
+
+
+    public int getPendingCongesCount() {
+        return pendingConges != null ? pendingConges.size() : 0;
     }
 
     public Conge getNewConge() {
@@ -102,14 +104,13 @@ public class CongeController implements Serializable {
         this.pendingConges = pendingConges;
     }
 
-    public List<Conge> getEmployeeConges() { // Ajouter un getter pour les congés de l'employé
+    public List<Conge> getEmployeeConges() {
         return employeeConges;
     }
 
     public void setEmployeeConges(List<Conge> employeeConges) {
         this.employeeConges = employeeConges;
     }
-
 
     public List<Conge> getFindAllCongeAll() {
         return findAllCongeAll;

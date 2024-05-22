@@ -21,6 +21,9 @@ public class CongeService {
     @Inject
     private EmailService emailService;
 
+    @Inject
+    private PdfGenerator pdfGenerator;
+
     @Transactional
     public void create(Conge conge) {
         em.persist(conge);
@@ -33,7 +36,10 @@ public class CongeService {
             conge.setStatut("Approuvé");
             update(conge);
 
-            emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé approuvée", "Votre demande de congé a été approuvée.");
+            String message = "Votre demande de congé a été approuvée.";
+            byte[] pdfData = pdfGenerator.generateLeaveApprovalPdf(message, conge.getMotif(), "Approuvée"); // Utilisez ici le nom ou l'identifiant du responsable
+
+            emailService.sendEmailWithAttachment(conge.getEmploye().getCourriel(), "Demande de congé approuvée", message, pdfData, "conge_approuve.pdf");
             System.out.println("Conge approuvé : " + congeId);
         } else {
             System.out.println("Conge non trouvé : " + congeId);
@@ -46,7 +52,11 @@ public class CongeService {
         if (conge != null) {
             conge.setStatut("Rejeté");
             update(conge);
-            emailService.sendEmail(conge.getEmploye().getCourriel(), "Demande de congé rejetée", "Votre demande de congé a été rejetée.");
+
+            String message = "Votre demande de congé a été rejetée.";
+            byte[] pdfData = pdfGenerator.generateLeaveApprovalPdf(message, conge.getMotif(), "Rejeté"); // Utilisez ici le nom ou l'identifiant du responsable
+
+            emailService.sendEmailWithAttachment(conge.getEmploye().getCourriel(), "Demande de congé rejetée", message, pdfData, "conge_rejete.pdf");
             System.out.println("Conge rejeté : " + congeId);
         } else {
             System.out.println("Conge non trouvé : " + congeId);

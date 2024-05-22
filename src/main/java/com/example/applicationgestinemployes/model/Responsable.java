@@ -79,4 +79,6 @@ public class Responsable {
     public void setMessagesEnvoyes(Set<Message> messagesEnvoyes) {
         this.messagesEnvoyes = messagesEnvoyes;
     }
+
+
 }

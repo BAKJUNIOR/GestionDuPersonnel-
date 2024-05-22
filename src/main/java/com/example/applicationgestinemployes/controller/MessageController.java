@@ -1,98 +1,106 @@
 package com.example.applicationgestinemployes.controller;
 
-import com.example.applicationgestinemployes.model.Message;
 import com.example.applicationgestinemployes.model.Employe;
-import com.example.applicationgestinemployes.service.EmployeServiceImpl;
+import com.example.applicationgestinemployes.model.Message;
+import com.example.applicationgestinemployes.model.Responsable;
+import com.example.applicationgestinemployes.service.EmployeService;
 import com.example.applicationgestinemployes.service.MessageService;
+import com.example.applicationgestinemployes.service.ResponsableService;
 import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
 @Named
-@RequestScoped
+@SessionScoped
 public class MessageController implements Serializable {
+    private Message message;
+    private List<Employe> employes;
+    private List<Employe> selectedDestinataires;
+
+    @Inject
+    private EmployeService employeService;
 
     @Inject
     private MessageService messageService;
 
     @Inject
-    private EmployeServiceImpl employeService;
-
-    private Message newMessage = new Message();
-    private List<Message> employeeMessages;
-    private List<Employe> allEmployees;
-    private List<Employe> selectedEmployees;
+    private ResponsableService responsableService;
 
     @PostConstruct
     public void init() {
-        Employe loggedInEmployee = getLoggedInEmployee();
-        if (loggedInEmployee != null) {
-            employeeMessages = messageService.getMessagesForEmployee(loggedInEmployee.getIdEmploye());
-        }
-        allEmployees = employeService.getAllEmployes();
+        message = new Message();
+        employes = employeService.getAllEmployes();
+        selectedDestinataires = new ArrayList<>();
     }
 
-    public String sendMessage() {
-        Employe sender = getLoggedInEmployee();
-        if (sender != null) {
-            newMessage.setResponsable(sender.getResponsable());
-            newMessage.setDestinataires(new HashSet<>(selectedEmployees));
-            messageService.sendMessage(newMessage);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Message envoyé avec succès"));
-            newMessage = new Message();  // Reset the message after sending
-            selectedEmployees = null;    // Reset the selected employees
-            return null; // Stay on the same page
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    public List<Employe> getEmployes() {
+        return employes;
+    }
+
+    public void setEmployes(List<Employe> employes) {
+        this.employes = employes;
+    }
+
+    public List<Employe> getSelectedDestinataires() {
+        return selectedDestinataires;
+    }
+
+    public void setSelectedDestinataires(List<Employe> selectedDestinataires) {
+        this.selectedDestinataires = selectedDestinataires;
+    }
+
+    public void handleDestinataireSelect(Employe selectedEmploye) {
+        if (!selectedDestinataires.contains(selectedEmploye)) {
+            selectedDestinataires.add(selectedEmploye);
+        }
+    }
+
+    public void envoyerMessage() {
+        // Récupérer la date actuelle
+        Date dateEnvoi = new Date();
+
+        Responsable responsable = getLoggedInResponsable();
+        if (responsable != null) {
+            message.setDestinataires(new HashSet<>(selectedDestinataires));
+            message.setResponsable(responsable); // Définir le responsable récupéré
+            message.setDateEnvoi(dateEnvoi); // Définir la date d'envoi
+            messageService.saveMessage(message);
+            // Réinitialiser le message après l'envoi
+            message = new Message();
+            selectedDestinataires = new ArrayList<>();
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Message envoyé."));
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé non trouvé"));
-            return null;
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Impossible de trouver le responsable."));
         }
     }
 
-    public Employe getLoggedInEmployee() {
-        String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
-        if (username != null) {
-            return employeService.findByUsername(username);
+    public Responsable getLoggedInResponsable() {
+        Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
+        String userRole = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");
+        System.out.println("Récupération de l'utilisateur connecté. ID: " + userId + ", Role: " + userRole);
+
+        if (userId != null && "RESPONSABLE".equals(userRole)) {
+            return responsableService.findByCourriel(userRole);
         }
         return null;
-    }
-
-    // Getters and Setters
-
-    public List<Employe> getAllEmployees() {
-        return allEmployees;
-    }
-
-    public void setAllEmployees(List<Employe> allEmployees) {
-        this.allEmployees = allEmployees;
-    }
-
-    public List<Employe> getSelectedEmployees() {
-        return selectedEmployees;
-    }
-
-    public void setSelectedEmployees(List<Employe> selectedEmployees) {
-        this.selectedEmployees = selectedEmployees;
-    }
-
-    public Message getNewMessage() {
-        return newMessage;
-    }
-
-    public void setNewMessage(Message newMessage) {
-        this.newMessage = newMessage;
-    }
-
-    public List<Message> getEmployeeMessages() {
-        return employeeMessages;
-    }
-
-    public void setEmployeeMessages(List<Message> employeeMessages) {
-        this.employeeMessages = employeeMessages;
     }
 }

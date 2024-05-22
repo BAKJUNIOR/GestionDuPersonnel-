@@ -1,9 +1,12 @@
 package com.example.applicationgestinemployes.controller;
 
 import com.example.applicationgestinemployes.model.Employe;
+import com.example.applicationgestinemployes.model.Responsable;
 import com.example.applicationgestinemployes.service.EmployeService;
+import com.example.applicationgestinemployes.service.ResponsableService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -12,6 +15,7 @@ import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.List;
 
 @Named
@@ -23,6 +27,8 @@ public class EmployeController implements Serializable {
 
     @Inject
     private EmployeService employeService;
+    @Inject
+    private ResponsableService responsableService;
 
     private transient List<Employe> employes;
     private Employe selectedEmploye = new Employe();
@@ -37,12 +43,33 @@ public class EmployeController implements Serializable {
     }
 
 
+
     public void addEmploye() {
-        employeService.addEmploye(selectedEmploye);
-        selectedEmploye = new Employe(); // Reset
-        init(); // Recharger la liste des employés
+        Responsable responsable = getLoggedInResponsable();
+        if (responsable != null) {
+            selectedEmploye.setResponsable(responsable);
+            employeService.addEmploye(selectedEmploye);
+            selectedEmploye = new Employe(); // Reset
+            init(); // Recharger la liste des employés
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Employé enregistré."));
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Employé non enregistré. Responsable non trouvé."));
+        }
     }
 
+    public Responsable getLoggedInResponsable() {
+        Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
+        String userRole = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");
+        System.out.println("Récupération de l'utilisateur connecté. ID: " + userId + ", Role: " + userRole);
+
+        if (userId != null && "RESPONSABLE".equals(userRole)) {
+            return responsableService.findById(userId);
+        }
+        return null;
+    }
 
 
     @Transactional
@@ -79,6 +106,12 @@ public class EmployeController implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur", "Aucun employé sélectionné."));
         }
     }
+
+    public int getTotalEmployeesCount() {
+        List<Employe> allEmployees = employeService.getAllEmployes();
+        return allEmployees != null ? allEmployees.size() : 0;
+    }
+
 
 
 

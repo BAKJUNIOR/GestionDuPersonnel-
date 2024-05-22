@@ -88,8 +88,8 @@ body {
 
 .dashboard-card {
     background-color: #fff;
-    border-radius: 4px;
-    height: 100px;
+    border-radius: 10px;
+    height: 170px;
 }
 
 .dashboard-table-card {
