@@ -12,6 +12,7 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,9 +22,11 @@ import java.util.List;
 @Named
 @SessionScoped
 public class MessageController implements Serializable {
+
     private Message message;
     private List<Employe> employes;
     private List<Employe> selectedDestinataires;
+    private List<Message> messagesEnvoyes;
 
     @Inject
     private EmployeService employeService;
@@ -39,6 +42,7 @@ public class MessageController implements Serializable {
         message = new Message();
         employes = employeService.getAllEmployes();
         selectedDestinataires = new ArrayList<>();
+        loadMessagesEnvoyes();
     }
 
     public Message getMessage() {
@@ -65,6 +69,14 @@ public class MessageController implements Serializable {
         this.selectedDestinataires = selectedDestinataires;
     }
 
+    public List<Message> getMessagesEnvoyes() {
+        return messagesEnvoyes;
+    }
+
+    public void setMessagesEnvoyes(List<Message> messagesEnvoyes) {
+        this.messagesEnvoyes = messagesEnvoyes;
+    }
+
     public void handleDestinataireSelect(Employe selectedEmploye) {
         if (!selectedDestinataires.contains(selectedEmploye)) {
             selectedDestinataires.add(selectedEmploye);
@@ -72,21 +84,22 @@ public class MessageController implements Serializable {
     }
 
     public void envoyerMessage() {
-        // Récupérer la date actuelle
         Date dateEnvoi = new Date();
 
         Responsable responsable = getLoggedInResponsable();
         if (responsable != null) {
             message.setDestinataires(new HashSet<>(selectedDestinataires));
-            message.setResponsable(responsable); // Définir le responsable récupéré
-            message.setDateEnvoi(dateEnvoi); // Définir la date d'envoi
+            message.setResponsable(responsable);
+            message.setDateEnvoi(dateEnvoi);
             messageService.saveMessage(message);
-            // Réinitialiser le message après l'envoi
+
             message = new Message();
             selectedDestinataires = new ArrayList<>();
 
+            loadMessagesEnvoyes();
+
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Message envoyé."));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Message envoyé", "Succès."));
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Impossible de trouver le responsable."));
@@ -94,12 +107,35 @@ public class MessageController implements Serializable {
     }
 
     public Responsable getLoggedInResponsable() {
-        Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
-        String userRole = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");
-        System.out.println("Récupération de l'utilisateur connecté. ID: " + userId + ", Role: " + userRole);
+        String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
+        if (username != null) {
+            return responsableService.findByUsername(username);
+        }
+        return null;
+    }
 
-        if (userId != null && "RESPONSABLE".equals(userRole)) {
-            return responsableService.findByCourriel(userRole);
+    private void loadMessagesEnvoyes() {
+        Responsable responsable = getLoggedInResponsable();
+        if (responsable != null) {
+            messagesEnvoyes = messageService.findMessagesByResponsable(responsable.getIdResponsable());
+        } else {
+            messagesEnvoyes = new ArrayList<>();
+        }
+    }
+
+    // Méthode pour récupérer les messages reçus par l'employé connecté
+    public List<Message> getMessagesRecus() {
+        Employe employe = getLoggedInEmploye();
+        if (employe != null) {
+            return messageService.findMessagesForEmployee(employe.getIdEmploye());
+        }
+        return new ArrayList<>();
+    }
+
+    public Employe getLoggedInEmploye() {
+        String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
+        if (username != null) {
+            return employeService.findByUsername(username);
         }
         return null;
     }

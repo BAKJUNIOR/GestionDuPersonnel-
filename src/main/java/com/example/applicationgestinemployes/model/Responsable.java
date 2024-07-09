@@ -15,9 +15,10 @@ public class Responsable {
     private String nom;
     private String adresse;
     private String numeroTelephone;
+
     private String courriel;
     private String password;
-
+    private String username;  // Ajout du champ pour le nom d'utilisateur
     @OneToMany(mappedBy = "responsable", cascade = CascadeType.ALL)
     private Set<Message> messagesEnvoyes = new HashSet<>();
     // Getters and setters
@@ -65,6 +66,14 @@ public class Responsable {
 
     public String getPassword() {
         return password;  // Getter pour le mot de passe
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {

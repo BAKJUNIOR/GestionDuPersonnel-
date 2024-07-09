@@ -52,21 +52,21 @@ public class LoginContrller implements Serializable {
     }
 
     public String login() {
-        // Vérifier les informations de connexion pour les employés
         List<Employe> employes = employeService.getAllEmployes();
         for (Employe employe : employes) {
             if (employe.getUsername().equals(username) && employe.getPassword().equals(password)) {
                 role = "EMPLOYE";
+                // Définir le username dans la session
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
-                return "/views/admin/indexEmploye.xhtml?faces-redirect=true";
+                return "/views/admin/employe/DemandeConge.xhtml?faces-redirect=true";
             }
         }
 
-        // Vérifier les informations de connexion pour les responsables
         List<Responsable> responsables = responsableService.findAll();
         for (Responsable responsable : responsables) {
-            if (responsable.getNom().equals(username) && responsable.getPassword().equals(password)) {
+            if (responsable.getUsername().equals(username) && responsable.getPassword().equals(password)) {
                 role = "RESPONSABLE";
+                // Définir le username dans la session
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("username", username);
                 return "/views/admin/index.xhtml?faces-redirect=true";
             }
@@ -83,7 +83,6 @@ public class LoginContrller implements Serializable {
         }
         return "/login.xhtml?faces-redirect=true";
     }
-
     public boolean isEmploye() {
         return "EMPLOYE".equals(role);
     }
@@ -91,4 +90,10 @@ public class LoginContrller implements Serializable {
     public boolean isResponsable() {
         return "RESPONSABLE".equals(role);
     }
+    public boolean isActive(String viewPath) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        String currentView = context.getViewRoot().getViewId();
+        return currentView != null && currentView.equals(viewPath);
+    }
+
 }

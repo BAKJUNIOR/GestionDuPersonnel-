@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.security.Principal;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named
 @ViewScoped
@@ -31,6 +33,7 @@ public class EmployeController implements Serializable {
     private ResponsableService responsableService;
 
     private transient List<Employe> employes;
+
     private Employe selectedEmploye = new Employe();
 
     @PostConstruct
@@ -44,7 +47,7 @@ public class EmployeController implements Serializable {
 
 
 
-    public void addEmploye() {
+    public void addEmploye() throws IOException {
         Responsable responsable = getLoggedInResponsable();
         if (responsable != null) {
             selectedEmploye.setResponsable(responsable);
@@ -53,23 +56,35 @@ public class EmployeController implements Serializable {
             init(); // Recharger la liste des employés
 
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès", "Employé enregistré."));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Succès Employé enregistré", "Employé enregistré."));
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Employé non enregistré. Responsable non trouvé."));
         }
     }
 
-    public Responsable getLoggedInResponsable() {
-        Long userId = (Long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("userId");
-        String userRole = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("role");
-        System.out.println("Récupération de l'utilisateur connecté. ID: " + userId + ", Role: " + userRole);
 
-        if (userId != null && "RESPONSABLE".equals(userRole)) {
-            return responsableService.findById(userId);
+//    private Responsable getLoggedInResponsable() {
+//        FacesContext facesContext = FacesContext.getCurrentInstance();
+//        Long username = (Long) facesContext.getExternalContext().getSessionMap().get("username");
+//        String userRole = (String) facesContext.getExternalContext().getSessionMap().get("role");
+//
+//        if (username != null && "RESPONSABLE".equals(userRole)) {
+//            return responsableService.findById(username);
+//        }
+//
+//        return null;
+//    }
+
+    public Responsable getLoggedInResponsable() {
+        String username = (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("username");
+        if (username != null) {
+            return responsableService.findByUsername(username);
         }
         return null;
     }
+
+
 
 
     @Transactional
@@ -85,10 +100,12 @@ public class EmployeController implements Serializable {
                 existingEmploye.setSalaire(selectedEmploye.getSalaire());
 
                 employeService.updateEmploye(existingEmploye);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé mis à jour avec succès."));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Employé mis à jour avec succès.", "succès."));
                 FacesContext.getCurrentInstance().getExternalContext().redirect("listEmploye.xhtml?id=" + existingEmploye.getIdEmploye());
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "L'employé sélectionné n'existe pas."));
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "L'employé sélectionné n'existe pas."));
             }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Aucun employé sélectionné."));
@@ -101,10 +118,15 @@ public class EmployeController implements Serializable {
             employeService.deleteEmploye(selectedEmploye.getIdEmploye());
             employes.remove(selectedEmploye);
             selectedEmploye = new Employe(); // Reset selected employe
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Employé supprimé avec succès."));
+
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Employé supprimé avec succès.", "succès."));
         } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Erreur", "Aucun employé sélectionné."));
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur", "Aucun employé sélectionné."));
         }
+
+
     }
 
     public int getTotalEmployeesCount() {

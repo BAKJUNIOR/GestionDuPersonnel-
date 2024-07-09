@@ -1,13 +1,16 @@
 package com.example.applicationgestinemployes.service;
 
 import com.example.applicationgestinemployes.model.Responsable;
+
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.List;
 
 @RequestScoped
 public class ResponsableService {
+
     @PersistenceContext(unitName = "GestEmploye_dbConfig")
     private EntityManager em;
 
@@ -31,13 +34,14 @@ public class ResponsableService {
         return em.createQuery("SELECT r FROM Responsable r", Responsable.class).getResultList();
     }
 
-    public Responsable findByCourriel(String courriel) {
+    public Responsable findByUsername(String username) {
         try {
-            return em.createQuery("SELECT r FROM Responsable r WHERE r.courriel = :courriel", Responsable.class)
-                    .setParameter("courriel", courriel)
+            return em.createQuery("SELECT r FROM Responsable r WHERE r.username = :username", Responsable.class)
+                    .setParameter("username", username)
                     .getSingleResult();
         } catch (Exception e) {
             return null;
         }
     }
+
 }

@@ -12,4 +12,5 @@ public interface EmployeService {
     boolean deleteEmploye(Long id);
 
 
+    Employe findByUsername(String username);
 }

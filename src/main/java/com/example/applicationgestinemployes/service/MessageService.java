@@ -4,36 +4,42 @@ import com.example.applicationgestinemployes.model.Message;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.List;
 import jakarta.transaction.Transactional;
+
+import java.util.List;
 
 @RequestScoped
 public class MessageService {
+
     @PersistenceContext(unitName = "GestEmploye_dbConfig")
     private EntityManager em;
 
-    public void create(Message message) {
+    @Transactional
+    public void saveMessage(Message message) {
         em.persist(message);
     }
 
-    public void update(Message message) {
-        em.merge(message);
+    public List<Message> findMessagesByResponsable(Long responsableId) {
+        return em.createQuery("SELECT m FROM Message m WHERE m.responsable.idResponsable = :responsableId", Message.class)
+                .setParameter("responsableId", responsableId)
+                .getResultList();
     }
 
-    public void delete(Message message) {
+    public List<Message> findMessagesForEmployee(Long employeeId) {
+        return em.createQuery("SELECT m FROM Message m JOIN m.destinataires e WHERE e.idEmploye = :employeeId", Message.class)
+                .setParameter("employeeId", employeeId)
+                .getResultList();
+    }
+
+    public List<Message> findAllMessages() {
+        return em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
+    }
+
+    public void deleteMessage(Message message) {
         em.remove(em.merge(message));
     }
 
     public Message findById(Long id) {
         return em.find(Message.class, id);
-    }
-
-    public List<Message> findAll() {
-        return em.createQuery("SELECT m FROM Message m", Message.class).getResultList();
-    }
-
-    @Transactional
-    public void saveMessage(Message message) {
-        em.persist(message);
     }
 }
